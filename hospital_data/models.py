@@ -6,10 +6,13 @@ class Location(models.Model):
     state = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
     
+
 class Hospital(Location):
     name = models.CharField(max_length=250)
     code = models.CharField(max_length=4,unique=True)
     branch = models.CharField(max_length=50)
 
+    def __str__(self):
+        return f"{self.name}-{self.code}"
 
     

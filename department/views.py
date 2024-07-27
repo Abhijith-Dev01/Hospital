@@ -5,20 +5,28 @@ from rest_framework.response import Response
 from rest_framework.validators import ValidationError
 from .serializers import DepartmentSerializer
 from django.db.models import F
+from django.db import transaction
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 class DepartmentPagination(pagination.PageNumberPagination):
     page_size = 50
     max_page_size = 1000
+
 
 class DepartmentViewSet(ModelViewSet):
     serializer_class = DepartmentSerializer
     queryset = Department.objects.all().order_by('-id')
     pagination_class = DepartmentPagination
+    authentication_classes=[TokenAuthentication]
+    permission_classes=[IsAuthenticated]
+
     
     def list(self,request):
         response_data = list(self.queryset.values().annotate(hospital_name=F('hospital__name'),
                                                              hospital_code=F('hospital__code')))
         return Response(data=response_data,status=status.HTTP_200_OK)
     
+    @transaction.atomic
     def create(self,request):
         request_data = request.data
         serializer = DepartmentSerializer(data=request_data,many=True)
