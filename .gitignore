@@ -1,0 +1,9 @@
+#Folders to be ignored
+venv/
+**/__pycache__/**
+*/__pycache__/*
+**/static/**
+
+#files
+.vscode/
+*.sqlite3
