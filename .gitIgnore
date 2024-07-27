@@ -1,0 +1,6 @@
+#Folders to be ignored
+venv/
+.vscode/
+**/__pycache__/**
+*/__pycache__/*
+**/static/**
