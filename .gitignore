@@ -7,3 +7,4 @@ venv/
 #files
 .vscode/
 *.sqlite3
+.env
