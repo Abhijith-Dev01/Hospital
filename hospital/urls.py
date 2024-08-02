@@ -21,6 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('hospital/',include("hospital_data.urls")),
     path('hospital/departments/',include("department.urls")),
-    path('hospital-users/',include("users.urls")),
-    path('api-token-auth/', views.obtain_auth_token)
+    path('users/',include("users.urls")),
 ]

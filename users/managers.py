@@ -2,9 +2,9 @@ from django.contrib.auth.models import BaseUserManager
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 class UserManager(BaseUserManager):
-    def email_validator(self):
+    def email_validator(self,email):
         try:
-            validate_email(self.email)
+            validate_email(email)
         except Exception as e:
             raise ValidationError(str(e))
         

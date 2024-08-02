@@ -1,13 +1,13 @@
 from django.urls import path,include
 from rest_framework import routers
-from .token_authentication import *
+from .views import *
 
 
 
 router  = routers.DefaultRouter()
-app_name= "hospital/users"
+app_name= "users"
 
-# router.register("users",UserViewset,basename="users")
+router.register("register",UserRegisterViewset,basename="register")
 urlpatterns=[
                 path('',include(router.urls))
             ]
