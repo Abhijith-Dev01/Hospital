@@ -17,6 +17,7 @@ class DepartmentViewSet(ModelViewSet):
     serializer_class = DepartmentSerializer
     queryset = Department.objects.all().order_by('-id')
     pagination_class = DepartmentPagination
+    permission_classes=[IsAuthenticated]
 
 
     

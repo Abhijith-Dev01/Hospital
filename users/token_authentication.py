@@ -43,6 +43,5 @@
 #         url = 'http://127.0.0.1:8080/hospital/departments/'
 #         headers = {'Authorization': 'Token 391d70182a7eeb6bdba7a6b392e8b9f29bc7ba5c'}
 #         response = requests.get(url, headers=headers)
-#         print(response.json())
 
 #         return Response("heee")

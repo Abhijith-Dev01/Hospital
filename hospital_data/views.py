@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.validators import ValidationError
 from .serializers import * 
 from django.db.models import F
+from rest_framework.permissions import IsAuthenticated
 class HospitalPagination(pagination.PageNumberPagination):
     page_size =100
     max_page_size=1000
@@ -11,6 +12,7 @@ class HospitalViewset(viewsets.ModelViewSet):
     serializer_class = HospitalSerializer
     queryset = Hospital.objects.all().order_by("-id")
     pagination_class = HospitalPagination
+    permission_classes = [IsAuthenticated]
     
 
     def create(self,request):
