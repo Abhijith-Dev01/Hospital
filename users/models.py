@@ -52,7 +52,7 @@ class User(AbstractBaseUser,PermissionsMixin):
 
 class OneTimePassword(models.Model):
     user  = models.OneToOneField(User,on_delete=models.CASCADE)
-    otp = models.IntegerField(max_length=6,unique=True)
+    otp = models.IntegerField(unique=True)
     
     def __str__(self):
         return f"{self.user.first_name}-{self.otp}"
