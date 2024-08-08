@@ -1,7 +1,7 @@
 from .serializers  import *
 from django.shortcuts import get_object_or_404
 from django.db import transaction
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet,ViewSet
 from rest_framework import status,pagination
 from rest_framework.response import Response
 from .utils import send_otp
@@ -55,7 +55,7 @@ class UserRegisterViewset(ModelViewSet):
         return Response(status=status.HTTP_200_OK,
                         data={"message":"OTP verification done successfully"})
 
-class LoginUserViewSet(ModelViewSet):
+class LoginUserViewSet(ViewSet):
     serializer_class=LoginSerializer
     
     def create(self,request):
@@ -65,9 +65,8 @@ class LoginUserViewSet(ModelViewSet):
             return Response(data=serializer.data,status=status.HTTP_200_OK)
         
 
-class PasswordResetViewSet(ModelViewSet):
+class PasswordResetViewSet(ViewSet):
     serializer_class = ResetPasswordSerializer
-    queryset = User.objects.all()
     def create(self,request):
         serializer  = self.serializer_class(data=request.data,
                                             context={'request':request})
@@ -93,7 +92,7 @@ class PasswordResetViewSet(ModelViewSet):
             raise ValidationError(str(e))
 
 
-class SetNewPasswordViewSet(ModelViewSet):
+class SetNewPasswordViewSet(ViewSet):
     serializer_class=SetNewPasswordSerializer
     
     def create(self,request):
@@ -104,7 +103,7 @@ class SetNewPasswordViewSet(ModelViewSet):
 
 
 class LogoutViewSet(ModelViewSet):
-    serializer_class=LoginSerializer
+    serializer_class=LogoutSerializer
     permission_classes=[IsAuthenticated]
     
     def create(self,request):
