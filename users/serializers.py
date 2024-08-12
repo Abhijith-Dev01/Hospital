@@ -17,7 +17,8 @@ class UserRegisterSerializer(ModelSerializer):
     
     class Meta:      
         model = User
-        fields = ['username','password','email','password2','first_name','last_name']
+        fields = ['id','username','password','email','password2','first_name','last_name',
+                  'is_staff','is_supervisor','is_active','date_joined','is_manager']
         
     
     def validate(self,attrs):
@@ -34,11 +35,21 @@ class UserRegisterSerializer(ModelSerializer):
                 email=validated_data.get('email'),
                 first_name=validated_data.get('first_name'),
                 last_name= validated_data.get('last_name'),
-                password= validated_data.get('password')
+                password= validated_data.get('password'),
+                is_staff = validated_data.get('is_staff'),
+                is_manager = validated_data.get('is_manager')
                 
         )
         return user
-
+    
+    def update(self,instance,validated_data):
+        for key, value in validated_data.items():
+            if key != 'password' and key!='password2':
+                setattr(instance, key, value)
+        
+        instance.save()
+        return instance
+    
 class LoginSerializer(ModelSerializer):
     email = EmailField(max_length=255,min_length=6)
     password = CharField(max_length=255,write_only=True)
@@ -54,6 +65,7 @@ class LoginSerializer(ModelSerializer):
         email = attrs.get('email')
         password = attrs.get('password')
         request = self.context.get('request')
+        password = int(password)
         user = authenticate(request,email=email,password=password)
         if not user:
             raise ValidationError("Invalida credentails ")

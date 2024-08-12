@@ -37,8 +37,20 @@ class UserRegisterViewset(ModelViewSet):
                       })
             
         return Response(status=status.HTTP_400_BAD_REQUEST,data=serializer.errors)
-            
     
+    @transaction.atomic
+    def update(self,request,pk):
+        request_data = request.data
+        instance = self.get_object()
+        serializer = self.serializer_class(instance,data=request_data,partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            user_data = serializer.data
+            return Response(status=status.HTTP_200_OK,
+                data={'data':user_data,
+                      'message':f"Hi {user_data['first_name']} your data is updated"
+                      })
+
     @transaction.atomic
     @action(methods=['POST'],detail=False,url_path='verify-otp',url_name='verify-otp')
     def verify_otp(self,request):
@@ -59,10 +71,13 @@ class LoginUserViewSet(ViewSet):
     serializer_class=LoginSerializer
     
     def create(self,request):
-            serializer = self.serializer_class(data=request.data,
-                                               context={'request':request})
-            serializer.is_valid(raise_exception=True)
-            return Response(data=serializer.data,status=status.HTTP_200_OK)
+        serializer = self.serializer_class(data=request.data,
+                                            context={'request':request})
+        serializer.is_valid(raise_exception=True)
+        response =Response(serializer.data, status=status.HTTP_201_CREATED) 
+        response['User_Info'] = list(User.objects.filter(
+                                    email=request.data['email']).values())
+        return response
         
 
 class PasswordResetViewSet(ViewSet):
