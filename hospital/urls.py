@@ -25,5 +25,9 @@ urlpatterns = [
     path('hospital/doctors/',include("doctors.urls")),
     path('hospital/employees/',include("employees.urls")),
     path('hospital/resources/',include("medical_resources.urls")),
+    path('hospital/patients/',include("patient.urls")),
+    path('hospital/appointments/',include("appointment.urls")),
+    path('hospital/bills/',include("bill_section.urls")),
+
 ]
 

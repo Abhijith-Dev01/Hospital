@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
     'employees',
-    'medical_resources'
+    'medical_resources',
+    'bill_section',
+    'utils'
 ]
 
 MIDDLEWARE = [
