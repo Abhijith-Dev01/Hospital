@@ -20,7 +20,7 @@ class UserPagination(pagination.PageNumberPagination):
     
 class UserRegisterViewset(ModelViewSet):
     serializer_class=UserRegisterSerializer
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by('-id')
     pagination_class=UserPagination
     
     @transaction.atomic

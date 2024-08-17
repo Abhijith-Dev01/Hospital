@@ -9,6 +9,8 @@ class SequenceNumber(models.Model):
                        ('APNT','Appointment'),
                        ('STY','STAY'),
                        ('OPRT','Operation'),
-                       ('BL','BILL')]
+                       ('BL','BILL'),
+                       ('MDC','Medicine'),
+                       ('EQP','Equipment')]
     section = models.CharField(choices=section_choices,max_length=4)
     number = models.CharField(max_length=6)

@@ -5,4 +5,4 @@ class AppointmentSerializer(ModelSerializer):
     
     class Meta:
         model = Appointment
-        fields="__all__"
+        fields = "__all__"

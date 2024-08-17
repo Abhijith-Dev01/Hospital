@@ -5,4 +5,4 @@ class DoctorSerializer(ModelSerializer):
     
     class Meta:
         model = Doctor
-        fields="__all__"
+        fields = "__all__"

@@ -5,18 +5,17 @@ class PharmacyBillSerializer(ModelSerializer):
     
     class Meta:
         model = PharmacyBill
-        fields="__all__"
-        
+        fields = "__all__"      
 
 class OperationSerializer(ModelSerializer):
     
     class Meta:
         model = OperationCost
-        fields="__all__"
+        fields = "__all__"
         
         
 class BedRestSerializer(ModelSerializer):
     
     class Meta:
         model = BedRestCost
-        fields="__all__"
+        fields = "__all__"

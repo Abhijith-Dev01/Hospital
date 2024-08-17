@@ -16,6 +16,7 @@ class Doctor(Documnents):
     hospital = models.ForeignKey(Hospital,on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
     department = models.ForeignKey(Department,on_delete=models.CASCADE)
     salary = models.FloatField(null=False)

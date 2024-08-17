@@ -39,10 +39,17 @@ class DepartmentViewSet(ModelViewSet):
                 new_data.append(data)
         
         request_data = new_data
+
         if len(request_data)>0:
             if serializer.is_valid():
                 serializer.save()
+                print("addssdasdadssdsadds")
                 return Response(status=status.HTTP_201_CREATED, data={
                                     "message":"Department created successfully"})
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST,
+                                data={"error":serializer.errors})
         else:
-            raise ValidationError({"error":"Department with this code already exist in this hospital"})
+            print("heee")
+            return Response(status=status.HTTP_400_BAD_REQUEST,
+                                data={"error":"Department with this code already exist in this hospital"})
