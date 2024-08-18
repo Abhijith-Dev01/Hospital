@@ -5,9 +5,11 @@ from . models import *
 from rest_framework.pagination import PageNumberPagination
 from .serializers import *
 from rest_framework import status,response
-from django.db.models import F
+from django.db.models import F,Value
 from rest_framework.decorators import action
 from rest_framework.validators import ValidationError
+from utils.views import generate_sequence_number
+from django.db.models.functions import Concat
 # Create your views here.
 
 class AppointmentPagination(PageNumberPagination):
@@ -23,7 +25,18 @@ class AppointmentViewSet(ModelViewSet):
     
     def create(self,request):
         request_data = request.data
-      
+        new_data =[]
+        for data in request_data:
+                appointment_qs = list(self.queryset.filter(patient=data['patient'],
+                                                        doctor = data['doctor'],
+                                                        appointment_status='scheduled',
+                                                    hospital=data['hospital']))
+
+                if len(appointment_qs) ==0:
+                    data['appointment_id'] = generate_sequence_number('APNT')
+                    new_data.append(data)
+        
+        request_data = new_data
         if request_data is not None and len(request_data)>0:
             serializer = self.serializer_class(data=request_data,many=True)
             if serializer.is_valid():
@@ -44,9 +57,9 @@ class AppointmentViewSet(ModelViewSet):
 
         appointment_list = list(self.queryset.values().annotate(
                             hospital__name= F('hospital__name'),
-                            doctor__name = F('doctor__name'),
+                            doctor__name = F('doctor__first_name'),
                             doctor_id = F('doctor__doctor_id'),
-                            patient_name = F('patient__first_name')-F('patient__last_name')
+                            patient_name =Concat(F('patient__first_name'),Value('-'),F('patient__last_name'))
         ))
         return response.Response(status=status.HTTP_200_OK,
                                  data=appointment_list)  

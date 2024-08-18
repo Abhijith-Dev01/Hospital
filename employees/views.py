@@ -6,6 +6,7 @@ from rest_framework.pagination import PageNumberPagination
 from .serializers import *
 from rest_framework import status,response
 from django.db.models import F
+from utils.views import generate_sequence_number
 # Create your views here.
 
 class EmployeePagination(PageNumberPagination):
@@ -24,6 +25,16 @@ class EmployeeViewSet(ModelViewSet):
         username = request.user
         user_info = User.objects.get(username=username)
         if user_info.is_manager is True:
+            new_data =[]
+            for data in request_data:
+                employee_qs = list(self.queryset.filter(email=data['email'],
+                                                    hospital=data['hospital']))
+
+                if len(employee_qs) ==0:
+                    data['employee_id'] = generate_sequence_number('EMP')
+                    new_data.append(data)
+        
+            request_data = new_data
             if request_data is not None and len(request_data)>0:
                 serializer = self.serializer_class(data=request_data,many=True)
                 if serializer.is_valid():
@@ -47,13 +58,14 @@ class EmployeeViewSet(ModelViewSet):
         user_info = User.objects.get(username=username)
         if user_info.is_manager is True:
             employee_list = list(self.queryset.values().annotate(
-                                hospital__name= F('hospital__name'),
-                                department__name =F('department__name') 
+                                hospital_name= F('hospital__name'),
+                                department_name =F('department__name') 
             ))
         else:
-             employee_list = list(self.queryset.filter(user__username=username).values().annotate(
-                                hospital__name= F('hospital__name'),
-                                department__name =F('department__name') 
+            value_fields = ['first_name','last_name','email','gender','role']
+            employee_list = list(self.queryset.values(*value_fields).annotate(
+                                hospital_name= F('hospital__name'),
+                                department_name =F('department__name') 
             ))
         return response.Response(status=status.HTTP_200_OK,
                                  data=employee_list)  

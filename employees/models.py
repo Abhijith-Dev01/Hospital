@@ -30,6 +30,7 @@ class Employees(Documnents):
     date_of_birth = models.DateField(null=True, blank=True)
     experience_years = models.IntegerField(default=0)
     role = models.CharField(max_length=12,choices=ROLE_CHOICES,null=False)
+    email = models.EmailField(unique=True)
 
     def __str__(self):
         return f"{self.role}-{self.first_name} {self.last_name}"
