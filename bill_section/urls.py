@@ -4,7 +4,7 @@ from .views import *
 router = routers.DefaultRouter()
 app_name = 'hospital/bills/'
 
-router.register("",PharmacyBillViewSet,basename='bill')
+router.register("pharmacy-bill",PharmacyBillViewSet,basename='bill')
 router.register("operation-cost",OperationCostViewSet,basename='operation-cost')
 router.register("bedrest-cost",BedRestCostViewSet,basename='bedrest-cost')
 urlpatterns=[
